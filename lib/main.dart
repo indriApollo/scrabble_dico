@@ -23,11 +23,10 @@ class MainApp extends StatelessWidget {
 
     final home = Container(
         color: bgColor,
-        child: SafeArea(
+        child: const SafeArea(
             child: AppInitializer(
-                appInit: Db.init(),
                 loadingMessage: 'Chargement ...',
-                child: const Column(
+                child: Column(
                   children: [LetterTileInputField(initalText: 'MOTS')],
                 ))));
 
@@ -40,15 +39,11 @@ class MainApp extends StatelessWidget {
 }
 
 class AppInitializer extends StatefulWidget {
-  final Future<void>? appInit;
   final String loadingMessage;
   final Widget child;
 
   const AppInitializer(
-      {super.key,
-      required this.appInit,
-      required this.loadingMessage,
-      required this.child});
+      {super.key, required this.loadingMessage, required this.child});
 
   @override
   State<AppInitializer> createState() => _AppInitializerState();
@@ -60,7 +55,7 @@ class _AppInitializerState extends State<AppInitializer> {
   @override
   void initState() {
     super.initState();
-    _appInit = widget.appInit;
+    _appInit = Db.init();
   }
 
   @override
