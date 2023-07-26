@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scrabble_dico/application.dart';
 import 'package:scrabble_dico/widgets/letter_tile_input_field.dart';
+import 'package:scrabble_dico/widgets/word_validity_display.dart';
 
 const appTitle = 'Dictionnaire SCRABBLE';
 
@@ -25,10 +26,7 @@ class MainApp extends StatelessWidget {
         color: bgColor,
         child: const SafeArea(
             child: AppInitializer(
-                loadingMessage: 'Chargement ...',
-                child: Column(
-                  children: [LetterTileInputField(initalText: 'MOTS')],
-                ))));
+                loadingMessage: 'Chargement ...', child: HomeView())));
 
     if (Platform.isIOS) {
       return CupertinoApp(title: appTitle, home: home);
@@ -84,6 +82,39 @@ class _AppInitializerState extends State<AppInitializer> {
           );
         },
       ),
+    );
+  }
+}
+
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String _text = 'MOTS';
+  bool _isValid = true;
+
+  void _handleOnSubmitted(String text) {
+    setState(() {
+      _text = text.toUpperCase();
+      _isValid = Db.isWordValid(_text);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Spacer(),
+        LetterTileInputField(
+            initalText: 'MOTS', onSubmitted: _handleOnSubmitted),
+        const Spacer(),
+        WordValidityDisplay(word: _text, isValid: _isValid),
+        const Spacer(),
+      ],
     );
   }
 }
