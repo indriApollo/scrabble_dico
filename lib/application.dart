@@ -40,28 +40,28 @@ class Letter {
 class Db {
   static const dbMD5 = 'c7e5969c8046582d401468b04f8868b3';
   static const dbName = 'db.sqlite';
-  static late String dbStoragePath;
+  static late Database _conn;
 
   static Future<void> init() async {
     final appSupportDir = await getApplicationSupportDirectory();
-    dbStoragePath = '${appSupportDir.path}/$dbName';
+    final dbStorageFile = File('${appSupportDir.path}/$dbName');
 
-    if (!await _dbExistsAndIsValid()) await _copyDbFromAssets();
+    if (!await _dbExistsAndIsValid(dbStorageFile)) {
+      await _copyDbFromAssets(dbStorageFile);
+    }
+
+    _conn = sqlite3.open(dbStorageFile.path, mode: OpenMode.readOnly);
   }
 
   static bool isWordValid(String word) {
-    final db = sqlite3.open(dbStoragePath, mode: OpenMode.readOnly);
-
-    var result = db.select("SELECT 1 FROM words WHERE word = ?;", [word]);
+    var result = _conn.select("SELECT 1 FROM words WHERE word = ?;", [word]);
     return result.isNotEmpty;
   }
 
-  static Future<bool> _dbExistsAndIsValid() async {
-    final dbStorageFile = File(dbStoragePath);
-
+  static Future<bool> _dbExistsAndIsValid(File dbStorageFile) async {
     if (!await dbStorageFile.exists()) return false;
 
-    debugPrint('db file found at <$dbStoragePath>');
+    debugPrint('db file found at <${dbStorageFile.path}>');
 
     // verify db file checksum
     // Could be wrong if app was killed before copy was complete
@@ -69,12 +69,11 @@ class Db {
     return await _md5Match(dbStorageFile, dbMD5);
   }
 
-  static Future<void> _copyDbFromAssets() async {
+  static Future<void> _copyDbFromAssets(File dbStorageFile) async {
     const dbAssetPath = 'assets/$dbName.zlib';
-    final dbStorageFile = File(dbStoragePath);
 
     debugPrint(
-        'copying and uncompressing db from <$dbAssetPath> to <$dbStoragePath>');
+        'copying and uncompressing db from <$dbAssetPath> to <${dbStorageFile.path}>');
 
     final sw = Stopwatch();
     sw.start();

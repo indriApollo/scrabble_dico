@@ -19,7 +19,7 @@ class LetterTileInputField extends StatefulWidget {
 class _LetterTileInputFieldState extends State<LetterTileInputField> {
   static const double _inputPading = 6;
   static const double _tileSpacing = 4;
-  static const double _tileSize = LetterTile.tileSize + (_inputPading * 2);
+  static const double _tileSize = LetterTile.tileSize + (_tileSpacing * 2);
 
   late String _inputText;
   late final FocusNode _node;
