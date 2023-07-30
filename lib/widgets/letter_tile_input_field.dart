@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scrabble_dico/application.dart';
+import 'package:scrabble_dico/widgets/letter_tile_clear.dart';
+import 'package:scrabble_dico/widgets/shadow_editable_text.dart';
 
 import 'letter_tile.dart';
 
@@ -55,6 +56,13 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
     });
   }
 
+  void _handleTextInputClear() {
+    setState(() {
+      _controller.clear();
+      //_inputText = _controller.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const lightGray = Color(0xffecf0f1);
@@ -72,13 +80,10 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
                   borderRadius: BorderRadiusDirectional.all(
                       Radius.circular(10 + _inputPading))),
               child: Wrap(
-                spacing: _tileSpacing,
-                runSpacing: _tileSpacing,
-                alignment: WrapAlignment.center,
-                children: _inputText.characters
-                    .map((c) => _letterTileByCharacter(c))
-                    .toList(),
-              )),
+                  spacing: _tileSpacing,
+                  runSpacing: _tileSpacing,
+                  alignment: WrapAlignment.center,
+                  children: _inputContent(_inputText.characters))),
           ShadowEditableText(
               textEditingController: _controller,
               focusNode: _node,
@@ -92,43 +97,10 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
     final l = Letter.fromCharacter(character);
     return LetterTile(character: l.character, points: l.points);
   }
-}
 
-class ShadowEditableText extends StatelessWidget {
-  final TextEditingController textEditingController;
-  final FocusNode focusNode;
-  final ValueChanged<String>? onSubmitted;
-  final Pattern textFilter;
-  final int? maxTextLength;
-
-  const ShadowEditableText(
-      {super.key,
-      required this.textEditingController,
-      required this.focusNode,
-      required this.onSubmitted,
-      required this.textFilter,
-      this.maxTextLength});
-
-  @override
-  Widget build(BuildContext context) {
-    const noColor = Color(0x00000000);
-
-    return SizedBox(
-        width: 0,
-        height: 0,
-        child: EditableText(
-            onSubmitted: onSubmitted,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(textFilter),
-              LengthLimitingTextInputFormatter(maxTextLength)
-            ],
-            autocorrect: false,
-            enableSuggestions: false,
-            controller: textEditingController,
-            focusNode: focusNode,
-            style: const TextStyle(color: noColor, fontSize: 0),
-            showCursor: false,
-            cursorColor: noColor,
-            backgroundCursorColor: noColor));
+  List<Widget> _inputContent(Characters characters) {
+    var l = characters.map((c) => _letterTileByCharacter(c)).toList();
+    if (l.isNotEmpty) l.add(LetterTileClear(onCLear: _handleTextInputClear));
+    return l;
   }
 }
