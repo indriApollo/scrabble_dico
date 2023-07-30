@@ -24,9 +24,8 @@ class MainApp extends StatelessWidget {
 
     final home = Container(
         color: bgColor,
-        child: const SafeArea(
-            child: AppInitializer(
-                loadingMessage: 'Chargement ...', child: HomeView())));
+        child: const AppInitializer(
+            loadingMessage: 'Chargement ...', child: HomeView()));
 
     if (Platform.isIOS) {
       return CupertinoApp(title: appTitle, home: home);
