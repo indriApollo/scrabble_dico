@@ -9,9 +9,10 @@ import 'letter_tile.dart';
 class LetterTileInputField extends StatefulWidget {
   final String initalText;
   final ValueChanged<String>? onSubmitted;
+  final void Function()? onCLear;
 
   const LetterTileInputField(
-      {super.key, this.initalText = '', this.onSubmitted});
+      {super.key, this.initalText = '', this.onSubmitted, this.onCLear});
 
   @override
   State<LetterTileInputField> createState() => _LetterTileInputFieldState();
@@ -20,6 +21,8 @@ class LetterTileInputField extends StatefulWidget {
 class _LetterTileInputFieldState extends State<LetterTileInputField> {
   static const double _tileSpacing = 4;
   static const double _tileTotalSpacing = _tileSpacing * 2;
+  static const double _minInputHeight = LetterTile.tileSize + _tileTotalSpacing;
+  static const double _minInputWidth = (LetterTile.tileSize * 3) + (_tileTotalSpacing * 2);
 
   late String _inputText;
   late final FocusNode _node;
@@ -58,6 +61,7 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
   void _handleTextInputClear() {
     setState(() {
       _controller.clear();
+      widget.onCLear?.call();
       //_inputText = _controller.text;
     });
   }
@@ -72,7 +76,7 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
         child: Stack(children: [
           Container(
               constraints: const BoxConstraints(
-                  minHeight: LetterTile.tileSize + _tileTotalSpacing, minWidth: (LetterTile.tileSize * 3) + (_tileTotalSpacing * 2)),
+                  minHeight: _minInputHeight, minWidth: _minInputWidth),
               padding: const EdgeInsets.all(_tileSpacing),
               decoration: const BoxDecoration(
                   color: lightGray,

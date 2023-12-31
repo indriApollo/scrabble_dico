@@ -103,17 +103,31 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  void _handleOnClear() {
+    setState(() {
+      _text = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const Spacer(),
         LetterTileInputField(
-            initalText: 'MOTS', onSubmitted: _handleOnSubmitted),
-        const Spacer(),
-        WordValidityDisplay(word: _text, isValid: _isValid),
+            initalText: 'MOTS', onSubmitted: _handleOnSubmitted, onCLear: _handleOnClear),
+        //const Spacer(),
+        _validityDisplay(),
         const Spacer(),
       ],
     );
+  }
+
+  Widget _validityDisplay() {
+    if (_text.isNotEmpty) {
+      return WordValidityDisplay(word: _text, isValid: _isValid);
+    } else {
+      return const Text("Tapez un mot");
+    }
   }
 }
