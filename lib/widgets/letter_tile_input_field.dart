@@ -18,9 +18,8 @@ class LetterTileInputField extends StatefulWidget {
 }
 
 class _LetterTileInputFieldState extends State<LetterTileInputField> {
-  static const double _inputPading = 6;
   static const double _tileSpacing = 4;
-  static const double _tileSize = LetterTile.tileSize + (_tileSpacing * 2);
+  static const double _tileTotalSpacing = _tileSpacing * 2;
 
   late String _inputText;
   late final FocusNode _node;
@@ -73,12 +72,12 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
         child: Stack(children: [
           Container(
               constraints: const BoxConstraints(
-                  minHeight: _tileSize, minWidth: _tileSize * 3),
-              padding: const EdgeInsets.all(_inputPading),
+                  minHeight: LetterTile.tileSize + _tileTotalSpacing, minWidth: (LetterTile.tileSize * 3) + (_tileTotalSpacing * 2)),
+              padding: const EdgeInsets.all(_tileSpacing),
               decoration: const BoxDecoration(
                   color: lightGray,
                   borderRadius: BorderRadiusDirectional.all(
-                      Radius.circular(10 + _inputPading))),
+                      Radius.circular(10 + _tileSpacing))),
               child: Wrap(
                   spacing: _tileSpacing,
                   runSpacing: _tileSpacing,
