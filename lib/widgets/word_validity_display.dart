@@ -10,7 +10,7 @@ class WordValidityDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'le mot $word est ${isValid ? 'valide' : 'invalide'}',
+      'Le mot $word est ${isValid ? 'valide' : 'invalide'}',
       style: TextStyle(
           color: isValid ? const Color(0xff00ff00) : const Color(0xffff0000)),
     );

@@ -61,9 +61,9 @@ class _LetterTileInputFieldState extends State<LetterTileInputField> {
   void _handleTextInputClear() {
     setState(() {
       _controller.clear();
-      widget.onCLear?.call();
       //_inputText = _controller.text;
     });
+    widget.onCLear?.call();
   }
 
   @override

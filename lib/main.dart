@@ -113,12 +113,12 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Spacer(),
+        const Spacer(flex: 1),
         LetterTileInputField(
             initalText: 'MOTS', onSubmitted: _handleOnSubmitted, onCLear: _handleOnClear),
-        //const Spacer(),
+        const Spacer(flex: 1),
         _validityDisplay(),
-        const Spacer(),
+        const Spacer(flex: 2),
       ],
     );
   }
